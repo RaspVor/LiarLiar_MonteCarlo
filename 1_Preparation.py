@@ -60,7 +60,7 @@ while len(Player.players_list) > 1:
     ##pick & announce
     if Player.players_list[counter_turnZ.winner].IA == "Bot" :
         card_picked = one_turn_IA_picked(counter_turnZ.counter, counter_turnZ.winner)
-        card_announced = one_turn_IA_announce(counter_turnZ.counter, counter_turnZ.winner)
+        card_announced = one_turn_IA_announce(counter_turnZ.counter, counter_turnZ.winner)²
     else:
         card_picked = one_turn_human_picked(counter_turnZ.counter, counter_turnZ.winner)
         card_announced = one_turn_human_announce(counter_turnZ.counter, counter_turnZ.winner) 
