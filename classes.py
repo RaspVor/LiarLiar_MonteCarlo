@@ -11,12 +11,15 @@ class nb_players:
 
 class Player:
     
+    players_list = []
+    
     def __init__(self, name = "Anonymous", IA = "Bot", player_number = int, cards = list(), cave = list()):
         self.name = name
         self.IA = IA
         self.player_number = player_number
         self.cards = cards
         self.cave = cave
+        self.player_list.append(self)
     
 
 class cards_game:
