@@ -10,7 +10,9 @@ while (game_end == False):
     print('Players_list[1].cards[1] :',Players_list[1].cards[1])
     print('Players_list[1].cave[1] :',Players_list[1].cave[1])
     
-    
+    State = (compteur_tour.player_start,Players_list[0].cards[1],Players_list[0].cave[1],Players_list[1].cards[1],Players_list[1].cave[1])
+   
+     
     if compteur_tour.player_start != 0:
         
         #IA pick
@@ -22,9 +24,9 @@ while (game_end == False):
         Players_list[compteur_tour.player_start].cards = temp
         
         #RL make a call
-        RL_call_choice = np.random.choice(18, size=1, p=RL_call_actions_proba)[0]
+        RL_call_choice = np.random.choice(18, size=1, p=prob)[0]
         RL_call_action = RL_actions[RL_call_choice][:2]
-        
+        Action = RL_actions[RL_call_choice] #save the action
         
         #We check who won
         if ((RL_call_action == turn_played_IA[1]).all() == True):
@@ -58,12 +60,13 @@ while (game_end == False):
     else:
         
         #RL pick
-        RL_pick_choice = np.random.choice(18, size=1, p=RL_pick_actions_proba)[0]
+        RL_pick_choice = np.random.choice(18, size=1, p=prob)[0]
         RL_pick_action = RL_actions[RL_pick_choice]
         
         #Card pick and call made
         RL_pickcard_action = RL_pick_action[2:10]
         RL_pickcall_action = RL_pick_action[:2]
+        Action = RL_actions[RL_pick_choice] #save the action
         
         #The card picked is removed from his deck
         temp =  (np.array(['Ahuri', 'Bahamut', 'Golgotha', 'Ifrit', 'Leviathan', 'Ondine','Shiva', 'Taurus'], dtype='<U9'), 
