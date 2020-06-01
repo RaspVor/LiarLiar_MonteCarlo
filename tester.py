@@ -226,6 +226,15 @@ RL_call_actions_proba = np.array([0,0,0,0,
                                   0,0,0,0,
                                   1/2,1/2]) 
 
+#Initialisation Action
+prob =  np.zeros(18)
+if compteur_tour.player_start != 0:
+    prob = RL_call_actions_proba
+else:
+    prob = RL_pick_actions_proba
+
+action =  np.zeros(18)
+
 #======================================================================
 # Déroulement du jeu
 
@@ -239,6 +248,8 @@ while (game_end == False):
     print('Players_list[1].cards[1] :',Players_list[1].cards[1])
     print('Players_list[1].cave[1] :',Players_list[1].cave[1])
     
+    State = (compteur_tour.player_start,Players_list[0].cards[1],Players_list[0].cave[1],Players_list[1].cards[1],Players_list[1].cave[1])
+   
     
     if compteur_tour.player_start != 0:
         
@@ -251,9 +262,9 @@ while (game_end == False):
         Players_list[compteur_tour.player_start].cards = temp
         
         #RL make a call
-        RL_call_choice = np.random.choice(18, size=1, p=RL_call_actions_proba)[0]
+        RL_call_choice = np.random.choice(18, size=1, p=prob)[0]
         RL_call_action = RL_actions[RL_call_choice][:2]
-        
+        Action = RL_actions[RL_call_choice] #save the action
         
         #We check who won
         if ((RL_call_action == turn_played_IA[1]).all() == True):
@@ -287,12 +298,13 @@ while (game_end == False):
     else:
         
         #RL pick
-        RL_pick_choice = np.random.choice(18, size=1, p=RL_pick_actions_proba)[0]
+        RL_pick_choice = np.random.choice(18, size=1, p=prob)[0]
         RL_pick_action = RL_actions[RL_pick_choice]
         
         #Card pick and call made
         RL_pickcard_action = RL_pick_action[2:10]
         RL_pickcall_action = RL_pick_action[:2]
+        Action = RL_actions[RL_pick_choice] #save the action
         
         #The card picked is removed from his deck
         temp =  (np.array(['Ahuri', 'Bahamut', 'Golgotha', 'Ifrit', 'Leviathan', 'Ondine','Shiva', 'Taurus'], dtype='<U9'), 
@@ -330,4 +342,4 @@ while (game_end == False):
         else:
             Reward = 10
     
-    
+print([State,Action,Reward])
