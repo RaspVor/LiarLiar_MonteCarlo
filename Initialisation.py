@@ -111,3 +111,12 @@ RL_call_actions_proba = np.array([0,0,0,0,
                                   0,0,0,0,
                                   0,0,0,0,
                                   1/2,1/2]) 
+
+#Initialisation Action
+prob =  np.zeros(18)
+if compteur_tour.player_start != 0:
+    prob = RL_call_actions_proba
+else:
+    prob = RL_pick_actions_proba
+    
+action =  np.zeros(18)
