@@ -10,6 +10,7 @@ while (game_end == False):
     #print('Players_list[1].cards[1] :',Players_list[1].cards[1])
     #print('Players_list[1].cave[1] :',Players_list[1].cave[1])
     
+    
     State = (str(compteur_tour.player_start)+str(Players_list[0].cards[1])+str(Players_list[0].cave[1])+str(Players_list[1].cards[1])+str(Players_list[1].cave[1]))
    
      
@@ -59,7 +60,7 @@ while (game_end == False):
         else:
             Reward = -10
         
-        episode.append((State, Action, Reward))
+        episode.append((State, str(Action), Reward))
         
     else:
         
@@ -111,6 +112,6 @@ while (game_end == False):
         else:
             Reward = 10
             
-        episode.append((State, Action, Reward))
+        episode.append((State, str(Action), Reward))
             
     
