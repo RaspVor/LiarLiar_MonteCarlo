@@ -2,18 +2,21 @@
 
 while (game_end == False):
 
-    print('Reward :',Reward)
-    print('compteur_tour.round_num :',compteur_tour.round_num)
-    print('compteur_tour.player_start :',compteur_tour.player_start)
-    print('Players_list[0].cards[1] :',Players_list[0].cards[1])
-    print('Players_list[0].cave[1] :',Players_list[0].cave[1])
-    print('Players_list[1].cards[1] :',Players_list[1].cards[1])
-    print('Players_list[1].cave[1] :',Players_list[1].cave[1])
+    #print('Reward :',Reward)
+    #print('compteur_tour.round_num :',compteur_tour.round_num)
+    #print('compteur_tour.player_start :',compteur_tour.player_start)
+    #print('Players_list[0].cards[1] :',Players_list[0].cards[1])
+    #print('Players_list[0].cave[1] :',Players_list[0].cave[1])
+    #print('Players_list[1].cards[1] :',Players_list[1].cards[1])
+    #print('Players_list[1].cave[1] :',Players_list[1].cave[1])
     
-    State = (compteur_tour.player_start,Players_list[0].cards[1],Players_list[0].cave[1],Players_list[1].cards[1],Players_list[1].cave[1])
+    State = (str(compteur_tour.player_start)+str(Players_list[0].cards[1])+str(Players_list[0].cave[1])+str(Players_list[1].cards[1])+str(Players_list[1].cave[1]))
    
      
     if compteur_tour.player_start != 0:
+        
+        #Initialisation Action/prob
+        prob = RL_call_actions_proba
         
         #IA pick
         turn_played_IA = one_turn_Bot_picker_Action(Players_list[compteur_tour.player_start])
@@ -56,8 +59,12 @@ while (game_end == False):
         else:
             Reward = -10
         
+        episode.append((State, Action, Reward))
         
     else:
+        
+        #Initialisation Action/prob
+        prob = RL_pick_actions_proba
         
         #RL pick
         RL_pick_choice = np.random.choice(18, size=1, p=prob)[0]
@@ -103,3 +110,7 @@ while (game_end == False):
             Reward = -10
         else:
             Reward = 10
+            
+        episode.append((State, Action, Reward))
+            
+    
