@@ -1,4 +1,11 @@
-def launcher():
+exec(open("./requirements.py").read())
+exec(open("./classes.py").read())
+exec(open("./functions.py").read())
+exec(open("./Initialisation.py").read())
+exec(open("./GAME.py").read())
+
+
+def launcher_stochastic():
     
     import random
     import numpy as np
@@ -207,7 +214,29 @@ def launcher():
                            [0,1,0,0,0,0,0,0,0,1],
                            [1,0,0,0,0,0,0,0,0,0],
                            [0,1,0,0,0,0,0,0,0,0]
-                           ])
+                           ]) 
+    
+    
+    Zactions =	{
+                  "[1 0 1 0 0 0 0 0 0 0]" : 0, 
+                  "[1 0 0 1 0 0 0 0 0 0]" : 1, 
+                  "[1 0 0 0 1 0 0 0 0 0]" : 2, 
+                  "[1 0 0 0 0 1 0 0 0 0]" : 3, 
+                  "[1 0 0 0 0 0 1 0 0 0]" : 4, 
+                  "[1 0 0 0 0 0 0 1 0 0]" : 5, 
+                  "[1 0 0 0 0 0 0 0 1 0]" : 6, 
+                  "[1 0 0 0 0 0 0 0 0 1]" : 7, 
+                  "[0 1 1 0 0 0 0 0 0 0]" : 8, 
+                  "[0 1 0 1 0 0 0 0 0 0]" : 9, 
+                  "[0 1 0 0 1 0 0 0 0 0]" : 10, 
+                  "[0 1 0 0 0 1 0 0 0 0]" : 11, 
+                  "[0 1 0 0 0 0 1 0 0 0]" : 12, 
+                  "[0 1 0 0 0 0 0 1 0 0]" : 13, 
+                  "[0 1 0 0 0 0 0 0 1 0]" : 14, 
+                  "[0 1 0 0 0 0 0 0 0 1]" : 15, 
+                  "[1 0 0 0 0 0 0 0 0 0]" : 16, 
+                  "[0 1 0 0 0 0 0 0 0 0]" : 17
+                }
     
     RL_pick_actions_proba = np.array([1/16,1/16,1/16,1/16,
                                       1/16,1/16,1/16,1/16,
@@ -293,7 +322,7 @@ def launcher():
             else:
                 Reward = -10
             
-            episode.append((State, Action, Reward))
+            episode.append((State, str(Action), Reward))
             
         else:
             
@@ -345,9 +374,9 @@ def launcher():
             else:
                 Reward = 10
                 
-            episode.append((State, Action, Reward))
+            episode.append((State, str(Action), Reward))
             
     
     return episode
 
-launcher()
+launcher_stochastic()
