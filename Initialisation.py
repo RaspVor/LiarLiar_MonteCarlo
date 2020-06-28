@@ -141,3 +141,7 @@ action =  np.zeros(18)
 
 #Initialise Episode 
 episode = []
+
+
+#Initialise State list
+Q = defaultdict(lambda: np.zeros(18))
