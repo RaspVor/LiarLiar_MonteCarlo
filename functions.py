@@ -53,3 +53,35 @@ def one_turn_Bot_caller_Action():
 
 #xxx one_turn_Bot_caller_Action()
 #xxx> array([1, 0])
+
+#Control des probas
+def get_probs_pick_actions(Q_s, epsilon, nS = 16, nA=18):
+    """ obtains the action probabilities corresponding to epsilon-greedy policy """
+    policy_s = np.ones(nA) * epsilon / nS
+    best_a = np.argmax(Q_s[:-2])
+    policy_s[best_a] = 1 - epsilon + (epsilon / nS)
+    
+    selector = np.array([1,1,1,1,
+                         1,1,1,1,
+                         1,1,1,1,
+                         1,1,1,1,
+                         0,0])
+    policy_s = np.where(selector==0, 0, policy_s)
+    
+    return policy_s
+
+
+def get_probs_call_actions(Q_s, epsilon, nS = 2, nA=18):
+    """ obtains the action probabilities corresponding to epsilon-greedy policy """
+    policy_s = np.ones(nA) * epsilon / nS
+    best_a = np.argmax(Q_s[-2:])+16
+    policy_s[best_a] = 1 - epsilon + (epsilon / nS)
+    
+    selector = np.array([0,0,0,0,
+                         0,0,0,0,
+                         0,0,0,0,
+                         0,0,0,0,
+                         1,1])
+    policy_s = np.where(selector==0, 0, policy_s)
+    
+    return policy_s

@@ -5,7 +5,7 @@ exec(open("./Initialisation.py").read())
 exec(open("./GAME.py").read())
 
 
-def launcher_stochastic():
+def launcher_stochastic(Q, epsilon = 1.0/((80000/8000)+1)):
     
     import random
     import numpy as np
@@ -113,6 +113,40 @@ def launcher_stochastic():
     
     #xxx one_turn_Bot_caller_Action()
     #xxx> array([1, 0])
+    
+    
+    #Control des probas
+    def get_probs_pick_actions(Q_s, epsilon, nS = 16, nA=18):
+        """ obtains the action probabilities corresponding to epsilon-greedy policy """
+        policy_s = np.ones(nA) * epsilon / nS
+        best_a = np.argmax(Q_s[:-2])
+        policy_s[best_a] = 1 - epsilon + (epsilon / nS)
+        
+        selector = np.array([1,1,1,1,
+                             1,1,1,1,
+                             1,1,1,1,
+                             1,1,1,1,
+                             0,0])
+        policy_s = np.where(selector==0, 0, policy_s)
+        
+        return policy_s
+
+
+    def get_probs_call_actions(Q_s, epsilon, nS = 2, nA=18):
+        """ obtains the action probabilities corresponding to epsilon-greedy policy """
+        policy_s = np.ones(nA) * epsilon / nS
+        best_a = np.argmax(Q_s[-2:])+16
+        policy_s[best_a] = 1 - epsilon + (epsilon / nS)
+        
+        selector = np.array([0,0,0,0,
+                             0,0,0,0,
+                             0,0,0,0,
+                             0,0,0,0,
+                             1,1])
+        policy_s = np.where(selector==0, 0, policy_s)
+        
+        return policy_s
+    
     
     
     # Initialisation du jeu
@@ -245,6 +279,8 @@ def launcher_stochastic():
                                       0,0])
     
     
+    
+    
     RL_call_actions_proba = np.array([0,0,0,0,
                                       0,0,0,0,
                                       0,0,0,0,
@@ -253,15 +289,14 @@ def launcher_stochastic():
     
     #Initialisation Action
     prob =  np.zeros(18)
-    
-        
+         
     action =  np.zeros(18)
     
     #Initialise Episode 
     episode = []
     
     
-    # DÃ©roulement du jeu
+    # Deroulement du jeu
     
     while (game_end == False):
     
@@ -273,13 +308,17 @@ def launcher_stochastic():
         #print('Players_list[1].cards[1] :',Players_list[1].cards[1])
         #print('Players_list[1].cave[1] :',Players_list[1].cave[1])
         
-        State = (str(compteur_tour.player_start)+str(Players_list[0].cards[1])+str(Players_list[0].cave[1])+str(Players_list[1].cards[1])+str(Players_list[1].cave[1]))
+        State = (str(compteur_tour.player_start)+str(Players_list[0].cards[1])+str(Players_list[0].cave[1])+str(Players_list[1].cave[1]))
        
          
         if compteur_tour.player_start != 0:
             
             #Initialisation Action/prob
-            prob = RL_call_actions_proba
+            prob = get_probs_call_actions(Q[State], epsilon) \
+                                    if (((State in Q) == True) and (np.all(Q[State][-2:] ==0) == False)) else RL_call_actions_proba
+                                      
+            #print("\rMAX : {} // Q[State]: {}.".format(np.argmax(Q[State][-2:])+16  , Q[State]), end="")          
+            #sys.stdout.flush()
             
             #IA pick
             turn_played_IA = one_turn_Bot_picker_Action(Players_list[compteur_tour.player_start])
@@ -327,7 +366,11 @@ def launcher_stochastic():
         else:
             
             #Initialisation Action/prob
-            prob = RL_pick_actions_proba
+            prob = get_probs_pick_actions(Q[State], epsilon) \
+                                    if(((State in Q) == True) and (np.all(Q[State][:-2] ==0.) == False)) else RL_pick_actions_proba
+                                        
+            #print("\rMAX : {} // Q[State]: {}.".format(np.argmax(Q[State][:-2])  , Q[State]), end="") 
+            #sys.stdout.flush()
             
             #RL pick
             RL_pick_choice = np.random.choice(18, size=1, p=prob)[0]
@@ -379,4 +422,4 @@ def launcher_stochastic():
     
     return episode
 
-launcher_stochastic()
+launcher_stochastic(Q)
